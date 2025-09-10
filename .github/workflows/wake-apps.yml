@@ -1,0 +1,168 @@
+# .github/workflows/wake-apps.yml
+name: Wake Streamlit Apps
+
+# トリガーの設定
+on:
+  # 定期実行（cronスケジュール）
+  schedule:
+    # 4時間ごとに実行（UTC時間）
+    # 分 時 日 月 曜日
+    - cron: '0 */4 * * *'
+    # 日本時間で考える場合：
+    # - cron: '0 0,4,8,12,16,20 * * *'  # UTC（日本時間-9時間）
+  
+  # 手動実行も可能にする
+  workflow_dispatch:
+    inputs:
+      debug_mode:
+        description: 'デバッグモードで実行'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+  
+  # プッシュ時にも実行（テスト用）
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/**'
+
+# 環境変数の設定
+env:
+  TZ: 'Asia/Tokyo'
+  PYTHON_VERSION: '3.9'
+
+jobs:
+  wake-streamlit-apps:
+    name: Wake up Streamlit applications
+    runs-on: ubuntu-latest
+    
+    # タイムアウト設定（デフォルト6時間→30分に短縮）
+    timeout-minutes: 30
+    
+    steps:
+      # リポジトリのチェックアウト
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # 履歴を取得（ログの差分確認用）
+          fetch-depth: 2
+      
+      # Pythonのセットアップ
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'  # pip依存関係をキャッシュ
+      
+      # Chromeブラウザのインストール
+      - name: 🌐 Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+      
+      # ChromeDriverのインストール
+      - name: 🚗 Setup ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+      
+      # 依存関係のインストール
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+          
+          # ChromeDriverのバージョン確認
+          echo "Chrome version:"
+          google-chrome --version
+          echo "ChromeDriver version:"
+          chromedriver --version
+      
+      # デバッグ情報の表示（デバッグモード時のみ）
+      - name: 🔍 Debug information
+        if: ${{ github.event.inputs.debug_mode == 'true' }}
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Files in scripts/:"
+          ls -la scripts/
+          echo "Python version:"
+          python --version
+          echo "Installed packages:"
+          pip list
+      
+      # メインスクリプトの実行
+      - name: 🚀 Wake up Streamlit apps
+        id: wake_apps
+        run: |
+          python scripts/wake_apps.py
+        continue-on-error: true  # エラーが発生しても続行
+      
+      # 実行結果の確認
+      - name: 📊 Check execution results
+        if: always()
+        run: |
+          if [ -f logs/streamlit_access.log ]; then
+            echo "📋 Latest log entries:"
+            tail -n 20 logs/streamlit_access.log
+          else
+            echo "⚠️ Log file not found"
+          fi
+      
+      # ログファイルをアーティファクトとして保存
+      - name: 💾 Upload logs as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wake-logs-${{ github.run_number }}
+          path: logs/
+          retention-days: 30
+      
+      # ログファイルをコミット（オプション）
+      - name: 📝 Commit log files
+        if: ${{ success() && github.event_name != 'pull_request' }}
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # ログファイルを追加
+          git add logs/
+          
+          # 変更がある場合のみコミット
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "📝 Update access logs [skip ci]"
+            git push
+          fi
+      
+      # Slackへの通知（オプション - Slack Webhookが必要）
+      - name: 📢 Notify results to Slack
+        if: ${{ failure() && github.event_name == 'schedule' }}
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: 'Streamlitアプリの起動処理で問題が発生しました'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        continue-on-error: true
+      
+      # 実行結果のサマリー
+      - name: 📈 Job Summary
+        if: always()
+        run: |
+          echo "## 実行結果サマリー" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- 実行時刻: $(date '+%Y-%m-%d %H:%M:%S %Z')" >> $GITHUB_STEP_SUMMARY
+          echo "- ワークフロー: ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 実行番号: #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- トリガー: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f logs/streamlit_access.log ]; then
+            echo "### 最新のアクセスログ" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -n 10 logs/streamlit_access.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi

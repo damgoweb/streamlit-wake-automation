@@ -1,0 +1,10 @@
+# scripts/requirements.txt
+# Selenium WebDriver
+selenium==4.16.0
+webdriver-manager==4.0.1
+
+# HTTP requests
+requests==2.31.0
+
+# Additional utilities
+python-dotenv==1.0.0  # 環境変数管理（オプション）
