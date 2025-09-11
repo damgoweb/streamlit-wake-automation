@@ -163,5 +163,60 @@
         "message": "No wake-up needed"
       }
     ]
+  },
+  {
+    "execution_time": "2025-09-11T21:08:54.604319",
+    "total_apps": 7,
+    "results": [
+      {
+        "name": "QRコード生成",
+        "url": "https://qr-code-app-dqfxmtvaq9tvym82xr3grz.streamlit.app",
+        "timestamp": "2025-09-11T21:08:54.604199",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "天気予報",
+        "url": "https://app-weather-forecast-app-xvdbgeyqypo4dcu9gkuhd4.streamlit.app",
+        "timestamp": "2025-09-11T21:08:54.604213",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "ビジネスダッシュボード",
+        "url": "https://app-colorful-dashboard-mw8do3iqicucaumypshfzl.streamlit.app",
+        "timestamp": "2025-09-11T21:08:54.604215",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "個人用ナレッジベース",
+        "url": "https://appknowledgebase-gauwakfpz5hbbswmsgrqyq.streamlit.app/",
+        "timestamp": "2025-09-11T21:08:54.604217",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "MAP",
+        "url": "https://appmapapp-wmljxtm7drgnmjjpkxndx5.streamlit.app",
+        "timestamp": "2025-09-11T21:08:54.604219",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "TODO アプリ",
+        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
+        "timestamp": "2025-09-11T21:08:54.604221",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "リアルタイム地球儀",
+        "url": "https://streatmitskyglobe-d48neqmv65fjrfaenjtmmj.streamlit.app",
+        "timestamp": "2025-09-11T21:08:54.604222",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      }
+    ]
   }
 ]
