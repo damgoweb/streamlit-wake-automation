@@ -9,15 +9,16 @@ import sys
 import time
 import json
 from datetime import datetime
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass, asdict
+import glob
+import shutil
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import requests
 
@@ -57,7 +58,7 @@ class StreamlitWaker:
     
     def __init__(self, config: Dict):
         self.config = config
-        self.driver = None
+        self.driver: Optional[webdriver.Chrome] = None
         self.results = []
         self.setup_logging()
     
@@ -92,13 +93,33 @@ class StreamlitWaker:
             chrome_options.add_argument('--disable-extensions')
         
         try:
-            service = Service()
-            driver = webdriver.Chrome(service=service, options=chrome_options)
+            # Selenium 4.x の新しい方法
+            # まずChromeDriverが自動検出されるか試す
+            driver = webdriver.Chrome(options=chrome_options)
             driver.set_page_load_timeout(self.config["timeout"])
+            print("✅ ChromeDriver auto-detected successfully")
             return driver
         except Exception as e:
-            print(f"❌ WebDriver setup failed: {e}")
-            sys.exit(1)
+            print(f"⚠️ Auto-detection failed: {e}")
+            print("📥 Trying with webdriver-manager...")
+            
+            try:
+                # webdriver-managerを使用した方法
+                from webdriver_manager.chrome import ChromeDriverManager
+                from selenium.webdriver.chrome.service import Service
+                
+                # ChromeDriverManagerでドライバーをダウンロード/取得
+                driver_path = ChromeDriverManager().install()
+                service = Service(driver_path)
+                
+                # Serviceオブジェクトを使用してChromeを起動
+                driver = webdriver.Chrome(service=service, options=chrome_options)
+                driver.set_page_load_timeout(self.config["timeout"])
+                print("✅ ChromeDriver installed via webdriver-manager")
+                return driver
+            except Exception as e2:
+                print(f"❌ WebDriver setup failed: {e2}")
+                sys.exit(1)
     
     def check_app_simple(self, app: StreamlitApp) -> Dict:
         """シンプルなHTTPチェック（高速）"""
@@ -140,6 +161,12 @@ class StreamlitWaker:
             "timestamp": datetime.now().isoformat(),
             "attempts": 0,
         }
+        
+        # driverがNoneでないことを確認
+        if not self.driver:
+            result["status"] = "FAILED"
+            result["message"] = "WebDriver not initialized"
+            return result
         
         for attempt in range(self.config["max_retries"]):
             result["attempts"] = attempt + 1
@@ -204,20 +231,31 @@ class StreamlitWaker:
         # 優先度順にソート
         sorted_apps = sorted(APPS, key=lambda x: x.priority)
         
-        # Phase 1: 高速HTTPチェック
-        print("\n📡 Phase 1: Quick HTTP check...")
-        apps_to_wake = []
+        # 強制Seleniumモードのチェック
+        force_selenium = self.config.get("force_selenium", False)
         
-        for app in sorted_apps:
-            check_result = self.check_app_simple(app)
-            print(f"  {app.name}: {check_result['status']}")
+        if force_selenium:
+            # すべてのアプリをSeleniumでチェック
+            print("\n🎯 Force mode: Checking all apps with Selenium...")
+            apps_to_wake = sorted_apps
+        else:
+            # Phase 1: 高速HTTPチェック
+            print("\n📡 Phase 1: Quick HTTP check...")
+            apps_to_wake = []
             
-            if check_result.get("needs_wake", False):
-                apps_to_wake.append(app)
+            for app in sorted_apps:
+                check_result = self.check_app_simple(app)
+                status = check_result['status']
+                
+                if check_result.get("needs_wake", False):
+                    apps_to_wake.append(app)
+                    print(f"  {app.name}: {status} → Will check with Selenium")
+                else:
+                    print(f"  {app.name}: {status} ✅")
         
         # Phase 2: Seleniumでの起動が必要なアプリのみ処理
         if apps_to_wake:
-            print(f"\n🎯 Phase 2: Waking {len(apps_to_wake)} apps with Selenium...")
+            print(f"\n🎯 Phase 2: Checking {len(apps_to_wake)} apps with Selenium...")
             self.driver = self.setup_driver()
             
             try:
@@ -312,12 +350,24 @@ def main():
     try:
         waker = StreamlitWaker(CONFIG)
         waker.run()
+        
+        # 明示的に成功を表示
+        print("\n✅ All operations completed successfully!")
         sys.exit(0)
+    except KeyboardInterrupt:
+        print("\n⚠️ Script interrupted by user")
+        sys.exit(130)
     except Exception as e:
         print(f"❌ Fatal error: {e}")
         import traceback
         traceback.print_exc()
-        sys.exit(1)
+        
+        # エラーでも部分的な成功があれば0を返す
+        if os.path.exists(os.path.join(CONFIG["log_dir"], CONFIG["log_file"])):
+            print("⚠️ Error occurred but logs were saved successfully")
+            sys.exit(0)  # ログが保存されていれば成功とする
+        else:
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()

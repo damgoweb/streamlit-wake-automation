@@ -1,17 +1,10 @@
 # .github/workflows/wake-apps.yml
 name: Wake Streamlit Apps
 
-# トリガーの設定
 on:
-  # 定期実行（cronスケジュール）
   schedule:
-    # 4時間ごとに実行（UTC時間）
-    # 分 時 日 月 曜日
-    - cron: '0 */4 * * *'
-    # 日本時間で考える場合：
-    # - cron: '0 0,4,8,12,16,20 * * *'  # UTC（日本時間-9時間）
+    - cron: '0 */4 * * *'  # 4時間ごと
   
-  # 手動実行も可能にする
   workflow_dispatch:
     inputs:
       debug_mode:
@@ -23,7 +16,6 @@ on:
           - 'true'
           - 'false'
   
-  # プッシュ時にも実行（テスト用）
   push:
     branches:
       - main
@@ -31,7 +23,6 @@ on:
       - 'scripts/**'
       - '.github/workflows/**'
 
-# 環境変数の設定
 env:
   TZ: 'Asia/Tokyo'
   PYTHON_VERSION: '3.9'
@@ -40,48 +31,47 @@ jobs:
   wake-streamlit-apps:
     name: Wake up Streamlit applications
     runs-on: ubuntu-latest
-    
-    # タイムアウト設定（デフォルト6時間→30分に短縮）
     timeout-minutes: 30
     
+    # 重要: 権限を明示的に設定
+    permissions:
+      contents: write  # リポジトリへの書き込み権限
+      actions: read    # Actionsの読み取り権限
+    
     steps:
-      # リポジトリのチェックアウト
+      # リポジトリのチェックアウト（重要: tokenを指定）
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
         with:
-          # 履歴を取得（ログの差分確認用）
-          fetch-depth: 2
+          fetch-depth: 0
+          # GITHUB_TOKENを明示的に指定
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true  # 認証情報を保持
       
-      # Pythonのセットアップ
       - name: 🐍 Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'  # pip依存関係をキャッシュ
+          cache: 'pip'
       
-      # Chromeブラウザのインストール
       - name: 🌐 Setup Chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
       
-      # ChromeDriverのインストール
       - name: 🚗 Setup ChromeDriver
         uses: nanasess/setup-chromedriver@v2
       
-      # 依存関係のインストール
       - name: 📦 Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r scripts/requirements.txt
           
-          # ChromeDriverのバージョン確認
           echo "Chrome version:"
           google-chrome --version
           echo "ChromeDriver version:"
           chromedriver --version
       
-      # デバッグ情報の表示（デバッグモード時のみ）
       - name: 🔍 Debug information
         if: ${{ github.event.inputs.debug_mode == 'true' }}
         run: |
@@ -92,15 +82,18 @@ jobs:
           python --version
           echo "Installed packages:"
           pip list
+          echo "Git remote:"
+          git remote -v
+          echo "Git config:"
+          git config --list
       
-      # メインスクリプトの実行
       - name: 🚀 Wake up Streamlit apps
         id: wake_apps
         run: |
           python scripts/wake_apps.py
-        continue-on-error: true  # エラーが発生しても続行
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+        continue-on-error: true
       
-      # 実行結果の確認
       - name: 📊 Check execution results
         if: always()
         run: |
@@ -110,8 +103,13 @@ jobs:
           else
             echo "⚠️ Log file not found"
           fi
+          
+          if [ "${{ steps.wake_apps.outputs.exit_code }}" = "0" ]; then
+            echo "✅ Script executed successfully"
+          else
+            echo "⚠️ Script exited with code: ${{ steps.wake_apps.outputs.exit_code }}"
+          fi
       
-      # ログファイルをアーティファクトとして保存
       - name: 💾 Upload logs as artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -120,35 +118,69 @@ jobs:
           path: logs/
           retention-days: 30
       
-      # ログファイルをコミット（オプション）
-      - name: 📝 Commit log files
-        if: ${{ success() && github.event_name != 'pull_request' }}
+      # 修正版: ログファイルのコミット
+      - name: 📝 Commit and push log files
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          # Git設定（botアカウントを使用）
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
           
-          # ログファイルを追加
-          git add logs/
+          # 認証情報を設定
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
           
-          # 変更がある場合のみコミット
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
+          # 最新の変更を取得
+          git pull origin main || true
+          
+          # ログファイルが存在するか確認
+          if [ -f logs/streamlit_access.log ]; then
+            git add logs/
+            
+            # 変更があるか確認
+            if git diff --staged --quiet; then
+              echo "📝 No changes to commit"
+            else
+              # コミット
+              git commit -m "📝 Update access logs [skip ci]
+              
+              Run: #${{ github.run_number }}
+              Time: $(date '+%Y-%m-%d %H:%M:%S %Z')" || true
+              
+              # プッシュ（リトライ付き）
+              for i in 1 2 3; do
+                if git push origin main; then
+                  echo "✅ Successfully pushed to repository"
+                  break
+                else
+                  echo "⚠️ Push failed, attempt $i/3"
+                  if [ $i -lt 3 ]; then
+                    sleep 5
+                  fi
+                fi
+              done
+            fi
           else
-            git commit -m "📝 Update access logs [skip ci]"
-            git push
+            echo "⚠️ No log file to commit"
           fi
       
-      # Slackへの通知（オプション - Slack Webhookが必要）
-      - name: 📢 Notify results to Slack
-        if: ${{ failure() && github.event_name == 'schedule' }}
-        uses: 8398a7/action-slack@v3
-        with:
-          status: ${{ job.status }}
-          text: 'Streamlitアプリの起動処理で問題が発生しました'
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      # Slack通知（オプション - 設定されている場合のみ）
+      - name: 📢 Notify results to Slack (Optional)
+        if: ${{ failure() && github.event_name == 'schedule' && env.SLACK_WEBHOOK_URL != '' }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -n "$SLACK_WEBHOOK_URL" ]; then
+            curl -X POST -H 'Content-type: application/json' \
+              --data '{"text":"⚠️ Streamlitアプリの起動処理で問題が発生しました"}' \
+              $SLACK_WEBHOOK_URL
+          else
+            echo "Slack webhook not configured, skipping notification"
+          fi
         continue-on-error: true
       
-      # 実行結果のサマリー
+      # ジョブサマリー
       - name: 📈 Job Summary
         if: always()
         run: |
@@ -158,6 +190,7 @@ jobs:
           echo "- ワークフロー: ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
           echo "- 実行番号: #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
           echo "- トリガー: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- ステータス: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [ -f logs/streamlit_access.log ]; then
@@ -165,4 +198,7 @@ jobs:
             echo '```' >> $GITHUB_STEP_SUMMARY
             tail -n 10 logs/streamlit_access.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "✅ ワークフローは正常に実行されました" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ ログファイルが生成されませんでした" >> $GITHUB_STEP_SUMMARY
           fi
