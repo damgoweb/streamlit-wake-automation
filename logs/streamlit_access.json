@@ -1,60 +1,5 @@
 [
   {
-    "execution_time": "2025-09-12T01:06:01.178964",
-    "total_apps": 7,
-    "results": [
-      {
-        "name": "QRコード生成",
-        "url": "https://qr-code-app-dqfxmtvaq9tvym82xr3grz.streamlit.app",
-        "timestamp": "2025-09-12T01:06:01.178854",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "天気予報",
-        "url": "https://app-weather-forecast-app-xvdbgeyqypo4dcu9gkuhd4.streamlit.app",
-        "timestamp": "2025-09-12T01:06:01.178868",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "ビジネスダッシュボード",
-        "url": "https://app-colorful-dashboard-mw8do3iqicucaumypshfzl.streamlit.app",
-        "timestamp": "2025-09-12T01:06:01.178870",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "個人用ナレッジベース",
-        "url": "https://appknowledgebase-gauwakfpz5hbbswmsgrqyq.streamlit.app/",
-        "timestamp": "2025-09-12T01:06:01.178872",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "MAP",
-        "url": "https://appmapapp-wmljxtm7drgnmjjpkxndx5.streamlit.app",
-        "timestamp": "2025-09-12T01:06:01.178874",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "TODO アプリ",
-        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
-        "timestamp": "2025-09-12T01:06:01.178875",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "リアルタイム地球儀",
-        "url": "https://streatmitskyglobe-d48neqmv65fjrfaenjtmmj.streamlit.app",
-        "timestamp": "2025-09-12T01:06:01.178877",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      }
-    ]
-  },
-  {
     "execution_time": "2025-09-12T05:05:35.429326",
     "total_apps": 7,
     "results": [
@@ -544,6 +489,61 @@
         "name": "リアルタイム地球儀",
         "url": "https://streatmitskyglobe-d48neqmv65fjrfaenjtmmj.streamlit.app",
         "timestamp": "2025-09-13T13:05:35.943784",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      }
+    ]
+  },
+  {
+    "execution_time": "2025-09-13T17:05:55.539153",
+    "total_apps": 7,
+    "results": [
+      {
+        "name": "QRコード生成",
+        "url": "https://qr-code-app-dqfxmtvaq9tvym82xr3grz.streamlit.app",
+        "timestamp": "2025-09-13T17:05:55.538994",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "天気予報",
+        "url": "https://app-weather-forecast-app-xvdbgeyqypo4dcu9gkuhd4.streamlit.app",
+        "timestamp": "2025-09-13T17:05:55.539010",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "ビジネスダッシュボード",
+        "url": "https://app-colorful-dashboard-mw8do3iqicucaumypshfzl.streamlit.app",
+        "timestamp": "2025-09-13T17:05:55.539012",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "個人用ナレッジベース",
+        "url": "https://appknowledgebase-gauwakfpz5hbbswmsgrqyq.streamlit.app/",
+        "timestamp": "2025-09-13T17:05:55.539014",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "MAP",
+        "url": "https://appmapapp-wmljxtm7drgnmjjpkxndx5.streamlit.app",
+        "timestamp": "2025-09-13T17:05:55.539017",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "TODO アプリ",
+        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
+        "timestamp": "2025-09-13T17:05:55.539019",
+        "status": "ALREADY_RUNNING",
+        "message": "No wake-up needed"
+      },
+      {
+        "name": "リアルタイム地球儀",
+        "url": "https://streatmitskyglobe-d48neqmv65fjrfaenjtmmj.streamlit.app",
+        "timestamp": "2025-09-13T17:05:55.539020",
         "status": "ALREADY_RUNNING",
         "message": "No wake-up needed"
       }
