@@ -1,60 +1,5 @@
 [
   {
-    "execution_time": "2025-09-18T09:19:12.870026",
-    "total_apps": 7,
-    "results": [
-      {
-        "name": "QRコード生成",
-        "url": "https://qr-code-app-dqfxmtvaq9tvym82xr3grz.streamlit.app",
-        "timestamp": "2025-09-18T09:19:12.869910",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "天気予報",
-        "url": "https://app-weather-forecast-app-xvdbgeyqypo4dcu9gkuhd4.streamlit.app",
-        "timestamp": "2025-09-18T09:19:12.869924",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "ビジネスダッシュボード",
-        "url": "https://app-colorful-dashboard-mw8do3iqicucaumypshfzl.streamlit.app",
-        "timestamp": "2025-09-18T09:19:12.869927",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "個人用ナレッジベース",
-        "url": "https://appknowledgebase-gauwakfpz5hbbswmsgrqyq.streamlit.app/",
-        "timestamp": "2025-09-18T09:19:12.869929",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "MAP",
-        "url": "https://appmapapp-wmljxtm7drgnmjjpkxndx5.streamlit.app",
-        "timestamp": "2025-09-18T09:19:12.869931",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "TODO アプリ",
-        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
-        "timestamp": "2025-09-18T09:19:12.869933",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      },
-      {
-        "name": "リアルタイム地球儀",
-        "url": "https://streatmitskyglobe-d48neqmv65fjrfaenjtmmj.streamlit.app",
-        "timestamp": "2025-09-18T09:19:12.869935",
-        "status": "ALREADY_RUNNING",
-        "message": "No wake-up needed"
-      }
-    ]
-  },
-  {
     "execution_time": "2025-09-18T13:05:54.314491",
     "total_apps": 7,
     "results": [
@@ -256,6 +201,20 @@
         "name": "TODO アプリ",
         "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
         "timestamp": "2025-09-19T21:09:08.803710",
+        "attempts": 1,
+        "status": "ALREADY_RUNNING",
+        "message": "App is already running"
+      }
+    ]
+  },
+  {
+    "execution_time": "2025-09-20T01:06:28.934313",
+    "total_apps": 7,
+    "results": [
+      {
+        "name": "TODO アプリ",
+        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
+        "timestamp": "2025-09-20T01:06:04.456304",
         "attempts": 1,
         "status": "ALREADY_RUNNING",
         "message": "App is already running"
