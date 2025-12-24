@@ -1,19 +1,5 @@
 [
   {
-    "execution_time": "2025-12-23T09:22:55.333376",
-    "total_apps": 7,
-    "results": [
-      {
-        "name": "TODO アプリ",
-        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
-        "timestamp": "2025-12-23T09:22:30.678365",
-        "attempts": 1,
-        "status": "ALREADY_RUNNING",
-        "message": "App is already running"
-      }
-    ]
-  },
-  {
     "execution_time": "2025-12-23T13:18:40.523253",
     "total_apps": 7,
     "results": [
@@ -133,6 +119,28 @@
         "name": "TODO アプリ",
         "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
         "timestamp": "2025-12-24T21:09:14.925158",
+        "attempts": 1,
+        "status": "ALREADY_RUNNING",
+        "message": "App is already running"
+      }
+    ]
+  },
+  {
+    "execution_time": "2025-12-25T01:08:00.407525",
+    "total_apps": 7,
+    "results": [
+      {
+        "name": "MAP",
+        "url": "https://appmapapp-wmljxtm7drgnmjjpkxndx5.streamlit.app",
+        "timestamp": "2025-12-25T01:07:21.990011",
+        "attempts": 1,
+        "status": "WOKEN_UP",
+        "message": "Successfully clicked wake button"
+      },
+      {
+        "name": "TODO アプリ",
+        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
+        "timestamp": "2025-12-25T01:07:35.413221",
         "attempts": 1,
         "status": "ALREADY_RUNNING",
         "message": "App is already running"
