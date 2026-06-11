@@ -1,27 +1,5 @@
 [
   {
-    "execution_time": "2026-06-10T09:55:45.986870",
-    "total_apps": 7,
-    "results": [
-      {
-        "name": "QRコード生成",
-        "url": "https://qr-code-app-dqfxmtvaq9tvym82xr3grz.streamlit.app",
-        "timestamp": "2026-06-10T09:55:05.253738",
-        "attempts": 1,
-        "status": "WOKEN_UP",
-        "message": "Successfully clicked wake button"
-      },
-      {
-        "name": "TODO アプリ",
-        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
-        "timestamp": "2026-06-10T09:55:21.030024",
-        "attempts": 1,
-        "status": "ALREADY_RUNNING",
-        "message": "App is already running"
-      }
-    ]
-  },
-  {
     "execution_time": "2026-06-10T14:35:48.858123",
     "total_apps": 7,
     "results": [
@@ -141,6 +119,20 @@
         "name": "TODO アプリ",
         "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
         "timestamp": "2026-06-11T22:22:49.264634",
+        "attempts": 1,
+        "status": "ALREADY_RUNNING",
+        "message": "App is already running"
+      }
+    ]
+  },
+  {
+    "execution_time": "2026-06-12T02:18:27.916817",
+    "total_apps": 7,
+    "results": [
+      {
+        "name": "TODO アプリ",
+        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
+        "timestamp": "2026-06-12T02:18:03.384228",
         "attempts": 1,
         "status": "ALREADY_RUNNING",
         "message": "App is already running"
