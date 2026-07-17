@@ -1,19 +1,5 @@
 [
   {
-    "execution_time": "2026-07-16T05:59:02.099349",
-    "total_apps": 7,
-    "results": [
-      {
-        "name": "TODO アプリ",
-        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
-        "timestamp": "2026-07-16T05:58:37.047242",
-        "attempts": 1,
-        "status": "ALREADY_RUNNING",
-        "message": "App is already running"
-      }
-    ]
-  },
-  {
     "execution_time": "2026-07-16T11:28:38.264478",
     "total_apps": 7,
     "results": [
@@ -133,6 +119,20 @@
         "name": "TODO アプリ",
         "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
         "timestamp": "2026-07-17T18:55:21.648697",
+        "attempts": 1,
+        "status": "ALREADY_RUNNING",
+        "message": "App is already running"
+      }
+    ]
+  },
+  {
+    "execution_time": "2026-07-17T22:24:45.240030",
+    "total_apps": 7,
+    "results": [
+      {
+        "name": "TODO アプリ",
+        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
+        "timestamp": "2026-07-17T22:24:20.041560",
         "attempts": 1,
         "status": "ALREADY_RUNNING",
         "message": "App is already running"
