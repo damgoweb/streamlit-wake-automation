@@ -1,19 +1,5 @@
 [
   {
-    "execution_time": "2026-11-05T20:52:11.131701",
-    "total_apps": 7,
-    "results": [
-      {
-        "name": "TODO アプリ",
-        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
-        "timestamp": "2026-11-05T20:51:46.056161",
-        "attempts": 1,
-        "status": "ALREADY_RUNNING",
-        "message": "App is already running"
-      }
-    ]
-  },
-  {
     "execution_time": "2026-11-06T04:30:56.635495",
     "total_apps": 7,
     "results": [
@@ -133,6 +119,44 @@
         "name": "TODO アプリ",
         "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
         "timestamp": "2026-11-08T08:25:29.348940",
+        "attempts": 1,
+        "status": "ALREADY_RUNNING",
+        "message": "App is already running"
+      }
+    ]
+  },
+  {
+    "execution_time": "2026-11-08T13:33:15.698472",
+    "total_apps": 7,
+    "results": [
+      {
+        "name": "ビジネスダッシュボード",
+        "url": "https://app-colorful-dashboard-mw8do3iqicucaumypshfzl.streamlit.app",
+        "timestamp": "2026-11-08T13:31:57.591872",
+        "attempts": 1,
+        "status": "ALREADY_RUNNING",
+        "message": "App is already running"
+      },
+      {
+        "name": "個人用ナレッジベース",
+        "url": "https://appknowledgebase-gauwakfpz5hbbswmsgrqyq.streamlit.app/",
+        "timestamp": "2026-11-08T13:32:25.618348",
+        "attempts": 1,
+        "status": "WOKEN_UP",
+        "message": "Successfully clicked wake button"
+      },
+      {
+        "name": "MAP",
+        "url": "https://appmapapp-wmljxtm7drgnmjjpkxndx5.streamlit.app",
+        "timestamp": "2026-11-08T13:32:38.214077",
+        "attempts": 1,
+        "status": "WOKEN_UP",
+        "message": "Successfully clicked wake button"
+      },
+      {
+        "name": "TODO アプリ",
+        "url": "https://appsimpletodo-nrzgxmanzr42p2bu5ckfqr.streamlit.app",
+        "timestamp": "2026-11-08T13:32:50.787505",
         "attempts": 1,
         "status": "ALREADY_RUNNING",
         "message": "App is already running"
